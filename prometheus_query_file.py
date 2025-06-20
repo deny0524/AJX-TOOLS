@@ -32,7 +32,6 @@ def main():
         print("-" * 80)
         print(reconstructed_query)
         print("-" * 80)
-        print("\nFormat: query_part_1, query_part_2, query_part_3, etc.")
     except FileNotFoundError:
         print(f"Error: File 'query.txt' not found in {os.path.dirname(os.path.abspath(__file__))}")
         print("\nUsage: Copy Prometheus query output to query.txt in the same directory")
