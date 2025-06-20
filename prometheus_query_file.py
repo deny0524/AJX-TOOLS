@@ -2,23 +2,19 @@ import os
 import re
 
 def reconstruct_query(input_text):
-    """Extract and reconstruct a query from Prometheus query_text fragments."""
-    # Extract all query_text parts using regex
-    pattern = r'query_text(?:_(\d+))?=\"([^\"]*)"'
+    """Extract and reconstruct a query from Prometheus query_part fragments."""
+    # Extract query_part_1, query_part_2, etc.
+    pattern = r'query_part_(\d+)=\"([^\"]*)"'
     matches = re.findall(pattern, input_text)
     
-    # Sort by index
-    query_parts = []
-    for idx_str, text in matches:
-        idx = int(idx_str) if idx_str else 0
-        query_parts.append((idx, text))
+    if not matches:
+        return "No query_part fragments found"
     
+    # Sort by index and concatenate
+    query_parts = [(int(idx), text) for idx, text in matches]
     query_parts.sort()
     
-    # Concatenate all parts
-    full_query = ''.join(text for _, text in query_parts)
-    
-    return full_query
+    return ''.join(text for _, text in query_parts)
 
 def main():
     """Read query.txt and display the reconstructed query."""
@@ -36,8 +32,11 @@ def main():
         print("-" * 80)
         print(reconstructed_query)
         print("-" * 80)
+        print("\nFormat: query_part_1, query_part_2, query_part_3, etc.")
     except FileNotFoundError:
         print(f"Error: File 'query.txt' not found in {os.path.dirname(os.path.abspath(__file__))}")
+        print("\nUsage: Copy Prometheus query output to query.txt in the same directory")
+        print("Format: query_part_1=\"...\", query_part_2=\"...\", etc.")
     except Exception as e:
         print(f"Error processing file: {str(e)}")
 
